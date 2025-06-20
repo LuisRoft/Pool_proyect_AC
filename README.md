@@ -120,7 +120,6 @@ Puedes modificar la cantidad de hilos en el `main` del script.
 * Python 3.8+
 * Docker y Docker Compose
 * psycopg2 → `pip install psycopg2`
-* (opcional) matplotlib si deseas graficar resultados
 
 ---
 
@@ -130,10 +129,3 @@ Puedes modificar la cantidad de hilos en el `main` del script.
 * Separación de responsabilidades (DAO, conexión).
 * Patrón Singleton para compartir el pool.
 * Test concurrente realista para medir eficiencia.
-
----
-
-### 📬 Contacto
-
-Desarrollado por [Tu Nombre o Equipo]  
-Inspirado en buenas prácticas de desarrollo backend con Python y PostgreSQL.
