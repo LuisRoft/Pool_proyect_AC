@@ -1,30 +1,31 @@
-### 🐘 Aplicación Python con PostgreSQL y Pool de Conexiones
+### 🐘 Proyecto Python con PostgreSQL y Pool de Conexiones
 
-Este proyecto es una simulación de una aplicación cliente-servidor en Python que interactúa con una base de datos PostgreSQL utilizando un **pool de conexiones** (`psycopg2.pool.SimpleConnectionPool`), siguiendo buenas prácticas como el uso del patrón **Singleton** y la arquitectura **DAO (Data Access Object)**.
-Además, incluye un test de carga concurrente con múltiples hilos para medir el comportamiento y rendimiento del pool.
+Este repositorio presenta una simulación de una aplicación cliente-servidor en Python que se conecta a una base de datos PostgreSQL utilizando un **pool de conexiones** (`psycopg2.pool.SimpleConnectionPool`). Se implementan buenas prácticas como el patrón **Singleton** y la arquitectura **DAO (Data Access Object)**.
+
+También se incluye una prueba de concurrencia con múltiples hilos para evaluar el rendimiento y funcionamiento del pool.
 
 ---
 
-### 📦 Estructura del Proyecto
+### 📦 Organización del Proyecto
 
 ```bash
 tu_proyecto/
 ├── db/
-│   └── connection_pool.py       # Singleton del pool de conexiones
+│   └── connection_pool.py       # Singleton para el pool de conexiones
 ├── dao/
-│   └── pedido_dao.py            # DAO para manejar operaciones sobre la tabla pedido
-├── test_concurrente.py          # Test de carga concurrente con hilos
+│   └── pedido_dao.py            # DAO para operaciones sobre la tabla pedido
+├── test_concurrente.py          # Prueba de concurrencia con hilos
 ├── main.py                      # Ejemplo de uso del DAO
-└── docker-compose.yml           # Para levantar PostgreSQL con Docker
+└── docker-compose.yml           # Configuración de PostgreSQL con Docker
 ```
 
 ---
 
-### 🐳 Levantar la Base de Datos con Docker Compose
+### 🐳 Inicializar la Base de Datos con Docker Compose
 
-La base de datos PostgreSQL utilizada en esta aplicación se levanta mediante Docker Compose.
+La base de datos PostgreSQL utilizada en este proyecto se levanta fácilmente con Docker Compose.
 
-#### 1. Contenido del `docker-compose.yml`
+#### 1. Ejemplo de `docker-compose.yml`
 
 ```yaml
 version: "3.8"
@@ -43,17 +44,17 @@ services:
       - ./data:/var/lib/postgresql/data
 ```
 
-#### 2. Comando para levantar el contenedor
+#### 2. Comando para iniciar el contenedor
 
 ```bash
 docker-compose up -d
 ```
 
-Asegúrate de tener Docker y Docker Compose instalados.
+Recuerda tener Docker y Docker Compose instalados previamente.
 
 ---
 
-### 🧾 Tabla usada: `pedido`
+### 🧾 Estructura de la tabla `pedido`
 
 ```sql
 CREATE TABLE public.pedido (
@@ -66,66 +67,69 @@ CREATE TABLE public.pedido (
 
 ---
 
-### 🚀 Uso del DAO
+### 🚀 Ejemplo de Uso del DAO
 
-El archivo `main.py` muestra cómo insertar y listar pedidos con el DAO.
+El archivo `main.py` contiene ejemplos para insertar y consultar pedidos usando el DAO.
 
 ```bash
 python main.py
 ```
 
-Esto realiza inserciones en la tabla `pedido` utilizando el pool de conexiones.
+Esto insertará registros en la tabla `pedido` utilizando el pool de conexiones.
 
 ---
 
-### 🧪 Test de Carga Concurrente
+### 🧪 Prueba de Concurrencia
 
 Archivo: `test_concurrente.py`
 
-Este script lanza múltiples hilos para insertar registros concurrentemente.
+Este script ejecuta varios hilos para insertar datos de manera simultánea.
 
-#### Parámetros simulados:
-* Número de hilos: 10, 20, 50  
-* Tamaño del pool: máximo 5 conexiones  
-* Modo de prueba:  
-  * Con liberación de conexión (`putconn()`)  
-  * Sin liberación (para simular mal uso)
+#### Parámetros de la simulación:
 
-#### Ejecutar test con 50 hilos:
+- Cantidad de hilos: 10, 20, 50
+- Tamaño máximo del pool: 5 conexiones
+- Modos de prueba:
+  - Liberando la conexión (`putconn()`)
+  - Sin liberar la conexión (para simular un mal uso)
+
+#### Ejecutar la prueba con 50 hilos:
 
 ```bash
 python test_concurrente.py
 ```
 
-Puedes modificar la cantidad de hilos en el `main` del script.
+Puedes ajustar el número de hilos modificando el `main` del script.
 
 ---
 
-### 📊 Resultados esperados
+### 📊 Qué resultados esperar
 
-#### Cuando se libera la conexión (`putconn()`):
-* Conexiones son reutilizadas correctamente.
-* Operaciones lentas pero exitosas.
-* Tiempo promedio aceptable.
+#### Si se libera la conexión (`putconn()`):
 
-#### Cuando NO se libera (`putconn()` omitido):
-* El pool se queda sin conexiones disponibles.
-* Algunos hilos se bloquean o fallan.
-* Tiempo de respuesta incrementa drásticamente.
+- Las conexiones se reutilizan correctamente.
+- Las operaciones pueden ser más lentas, pero exitosas.
+- El tiempo promedio es razonable.
+
+#### Si NO se libera la conexión (sin `putconn()`):
+
+- El pool se queda sin conexiones disponibles.
+- Algunos hilos quedan bloqueados o fallan.
+- El tiempo de respuesta aumenta considerablemente.
 
 ---
 
 ### ✅ Requisitos
 
-* Python 3.8+
-* Docker y Docker Compose
-* psycopg2 → `pip install psycopg2`
+- Python 3.8 o superior
+- Docker y Docker Compose
+- psycopg2 → `pip install psycopg2`
 
 ---
 
-### 📚 Buenas Prácticas Aplicadas
+### 📚 Buenas Prácticas Implementadas
 
-* Uso de pool de conexiones para escalabilidad.
-* Separación de responsabilidades (DAO, conexión).
-* Patrón Singleton para compartir el pool.
-* Test concurrente realista para medir eficiencia.
+- Uso de pool de conexiones para mejorar la escalabilidad.
+- Separación de responsabilidades (DAO, conexión).
+- Patrón Singleton para compartir el pool de conexiones.
+- Prueba concurrente realista para evaluar la eficiencia.
